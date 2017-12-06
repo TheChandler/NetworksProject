@@ -19,7 +19,7 @@ public class Server extends Thread{
     Server(String name){
         super(name);
         try {
-            socket = new DatagramSocket(Windowmen.port);
+            socket = new DatagramSocket(6565);
         }catch(SocketException e){
             System.out.println("Socket not opened;");
         }
@@ -46,14 +46,15 @@ public class Server extends Thread{
                 byte[] buffer=new byte[256];
                 DatagramPacket packet=new DatagramPacket(buffer,buffer.length);
                 socket.receive(packet);
-                System.out.println(packet.toString());
+                String output=new String(packet.getData(),0,packet.getLength());
+                System.out.println(output);
                 InetAddress address=packet.getAddress();
                 int port=packet.getPort();;
                 if (addAddress(address)==-1){
                     buffer="Sorry, server is full".getBytes();
                     packet=new DatagramPacket(buffer,buffer.length,address,port);
                 }else{
-                    buffer="Congrats".getBytes();
+                    buffer="Congrats, you swine".getBytes();
                     packet=new DatagramPacket(buffer,buffer.length,address,port);
                 }
                 socket.send(packet);

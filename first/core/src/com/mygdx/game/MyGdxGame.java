@@ -10,12 +10,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.io.IOException;
 
 public class MyGdxGame extends ApplicationAdapter {
-	ShapeRenderer batch;
 	SubGame subGame;
 
 	@Override
 	public void create () {
-		batch = new ShapeRenderer();
 		try {
 			subGame=new SubGame();
 		}catch(IOException e){
@@ -28,11 +26,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		subGame.render(batch);
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
+		subGame.render();
 	}
 }
