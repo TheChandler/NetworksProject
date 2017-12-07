@@ -24,9 +24,10 @@ public class Windowmen {
     Windowmen(SubGame sgame){
         subGame=sgame;
         frame=new JFrame();
-        frame.setSize(300,400);
         frame.setVisible(true);
         frame.add(makePanel());
+        frame.setSize(300,400);
+
     }
     JPanel makePanel(){
         JPanel pan=new JPanel();
@@ -39,6 +40,7 @@ public class Windowmen {
 
         pan.add(clientButton);
         pan.add(serverButton);
+        pan.setPreferredSize(new Dimension(100,10));
         return pan;
     }
 

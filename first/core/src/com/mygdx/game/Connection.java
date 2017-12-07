@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 
 /**
  * Created by chandler on 12/6/2017.
@@ -48,9 +49,17 @@ class Connection extends Thread {
     void    resetMessage(){
         newMessage=false;
     }
+    void send(DatagramPacket packet){
+        System.out.println(name+" Sending packet on "+packet.getPort());
+        try {
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     void send(int p){
-        DatagramPacket packet=new DatagramPacket(buffer,buffer.length,address,p);
-        System.out.println(name+" Sending on "+p);
+        packet=new DatagramPacket(buffer,buffer.length,address,p);
+        System.out.println(name+" Sending buffer on "+p);
         try{
             socket.send(packet);
         }catch(IOException io){
@@ -63,7 +72,11 @@ class Connection extends Thread {
             while (true){
                 packet=new DatagramPacket(buffer,buffer.length);
                 socket.receive(packet);
-                System.out.println(name+" recieved "+buffer[0]+" "+buffer[1]+" "+packet.getPort());
+                ByteBuffer b=ByteBuffer.allocate(256);
+                b.position(0);
+                b.put(packet.getData());
+                b.position(0);
+                System.out.println(name+" Recieved packet");
                 newMessage=true;
             }
         }catch(SocketException se){
