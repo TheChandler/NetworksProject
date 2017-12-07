@@ -54,10 +54,12 @@ public class Client extends Thread {
     }
     void connectToServer(){
         byte[] buffer=new byte[256];
-        Connection connection=new Connection(5656,buffer);
+        Connection connection=new Connection(5656,buffer,"Client");
         connection.start();
-
+        buffer[0]=120;
+        buffer[1]=119;
         while(!connection.isNewMessage()){
+            connection.send(5656);
         }
         System.out.println(buffer.toString());
     }

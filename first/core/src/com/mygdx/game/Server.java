@@ -20,7 +20,7 @@ public class Server extends Thread{
     Server(byte[] buffer){
         super("server");
         try {
-            socket = new DatagramSocket(6565);
+            socket = new DatagramSocket(5656);
         }catch(SocketException e){
             System.out.println("Socket not opened;");
         }

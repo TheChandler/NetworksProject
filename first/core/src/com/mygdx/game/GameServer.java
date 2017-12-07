@@ -9,13 +9,25 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class GameServer implements State {
     ShapeRenderer sr;
     Server server;
+    Connection connection;
+    byte[] buffer;
     GameServer(ShapeRenderer s){
         sr=s;
-        server=new Server("Seerverrrr");
+        buffer=new byte[256];
+        connection=new Connection(6565,buffer,"Establsihment server");
+        connection.start();
+        System.out.println("Server started");
     }
     @Override
     public void update(float dt) {
-
+        if (connection.isNewMessage()){
+            connection.resetMessage();
+            if (buffer[0]==120&&buffer[1]==120){
+                buffer[1]=12;
+                connection.send(2727);
+                System.out.println("Sent");
+            }
+        }
     }
 
     @Override
@@ -23,7 +35,6 @@ public class GameServer implements State {
         sr.setAutoShapeType(true);
         sr.begin();
         sr.set(ShapeRenderer.ShapeType.Filled);
-        sr.box(0,0,0,200,200,0);
         sr.end();
     }
 }
