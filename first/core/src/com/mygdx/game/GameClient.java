@@ -4,53 +4,42 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-/**
- * Created by chandler on 12/5/2017.
- */
+import java.net.DatagramPacket;
+import java.nio.ByteBuffer;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 
 public class GameClient implements State {
+    Random random =new Random();
     ShapeRenderer sr;
     Player player;
     Connection serverConnection;
-
-
-    float[][] actionLog;
-    int currentAction;
-    float totalTime;
     byte[] buffer;
     boolean isConnected;
 
+    int recievePort;
+    ByteBuffer b=ByteBuffer.allocate(256);
 
     GameClient(ShapeRenderer s){
         sr=s;
         player=new Player(200,200);
         buffer=new byte[256];
         isConnected=false;
+        recievePort=random.nextInt(300)+4000;
         establishConnection();
     }
     void establishConnection(){
-        Connection connection=new Connection(2727,buffer, "Client establishment");
-        connection.start();
-        buffer[1]=120;//arbitrary numbers I chose to represent a connectin request
-        buffer[0]=120;
-        connection.send(6565);
-
-        while(!connection.isNewMessage()){
-            //waits for a response from the server
-        }
-        connection.resetMessage();
-        System.out.println(buffer);
-        if (buffer[0]!=-1){
-            serverConnection=new Connection(buffer[1],this.buffer,"Client's connection to gameServer");
-            isConnected=true;
-        }
-
-
+        serverConnection=new Connection(recievePort,buffer,"Client "+recievePort);
+        b.putInt(0,127);
+        buffer=b.array();
+        DatagramPacket packet=new DatagramPacket(buffer,buffer.length);
     }
     @Override
     public void update(float dt) {
         if (isConnected) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                b.putInt(1);
                 player.moveLeft(dt);
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 player.moveRight(dt);
@@ -60,6 +49,7 @@ public class GameClient implements State {
                 player.moveDown(dt);
             }
         }
+
 
 
     }

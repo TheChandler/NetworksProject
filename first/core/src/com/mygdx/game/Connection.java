@@ -19,6 +19,8 @@ class Connection extends Thread {
     DatagramSocket socket;
     InetAddress address;
     String name;
+    DatagramPacket packet;
+
 
     Connection(int port,byte[] b,String name){
         this.port=port;
@@ -37,11 +39,18 @@ class Connection extends Thread {
     boolean isNewMessage(){
         return newMessage;
     }
-    void resetMessage(){
+    byte[]  getBuffer(){
+        return buffer;
+    }
+    DatagramPacket getPacket(){
+        return packet;
+    }
+    void    resetMessage(){
         newMessage=false;
     }
     void send(int p){
         DatagramPacket packet=new DatagramPacket(buffer,buffer.length,address,p);
+        System.out.println(name+" Sending on "+p);
         try{
             socket.send(packet);
         }catch(IOException io){
@@ -52,9 +61,9 @@ class Connection extends Thread {
         try {
             socket=new DatagramSocket(port);
             while (true){
-                DatagramPacket packet=new DatagramPacket(buffer,buffer.length);
+                packet=new DatagramPacket(buffer,buffer.length);
                 socket.receive(packet);
-                System.out.println(name+" "+buffer[0]+" "+buffer[1]+" "+packet.getPort());
+                System.out.println(name+" recieved "+buffer[0]+" "+buffer[1]+" "+packet.getPort());
                 newMessage=true;
             }
         }catch(SocketException se){
