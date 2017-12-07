@@ -18,31 +18,25 @@ public class GameClient implements State {
     float totalTime;
     GameClient(ShapeRenderer s){
         sr=s;
-        client=new Client();
         player=new Player(200,200);
-        actionLog=new float[100][4];//action/time/resultx/resulty
-        currentAction =0;
-        totalTime=0;
+        establishConnection();
     }
-    void logAction(float action,float time,float resultX,float resultY){
-        actionLog[currentAction][0]=action;
-        actionLog[currentAction][1]=time;
-        actionLog[currentAction][2]=resultX;
-        actionLog[currentAction][3]=resultY;
-
+    void establishConnection(){
+        
     }
-
-
     @Override
     public void update(float dt) {
-        totalTime+=dt;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            logAction(0,totalTime,player.x,player.y);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.moveLeft(dt);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.moveRight(dt);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            player.moveUp(dt);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            player.moveDown(dt);
         }
     }
-
-    @Override
+     @Override
     public void render() {
         sr.setAutoShapeType(true);
         sr.begin();

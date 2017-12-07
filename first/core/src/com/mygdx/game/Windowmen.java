@@ -41,6 +41,7 @@ public class Windowmen {
         pan.add(serverButton);
         return pan;
     }
+
     static void setPort(int p){
         port=p;
     }
@@ -60,6 +61,7 @@ class CreateServer implements ActionListener{
     SubGame subGame;
     CreateServer(SubGame s){
         subGame=s;
+
     }
 
     @Override

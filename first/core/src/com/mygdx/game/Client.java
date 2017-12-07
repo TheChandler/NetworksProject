@@ -22,10 +22,18 @@ import javax.swing.JFrame;
  */
 
 public class Client extends Thread {
-    static int port=0;
     JFrame frame;
     JButton button;
+    int port;
+    byte[] buffer;
+    boolean connected;
+
     Client(){
+        buffer=new byte[256];
+        makeFrame();
+        connected=false;
+    }
+    void makeFrame(){
         frame=new JFrame();
         frame.setVisible(true);
         frame.setSize(300,300);
@@ -35,7 +43,6 @@ public class Client extends Thread {
         frame.add((button));
     }
     public void run(){
-
     }
     void gameConnection(){
         try {
@@ -46,22 +53,13 @@ public class Client extends Thread {
         }
     }
     void connectToServer(){
-        try {
-            DatagramSocket socket=new DatagramSocket(4545);
-            byte[] buffer=new byte[256];
-            buffer="Connect".getBytes();
-            DatagramPacket packet=new DatagramPacket(buffer,buffer.length,InetAddress.getLocalHost(),6563);
-            socket.send(packet);
-            socket.receive(packet);
-            Client.port=packet.getData()[1];
-            gameConnection();
-        }catch (SocketException se){
-            System.out.println("Could not start client socket");
-        }catch(UnknownHostException uhe){
-            System.out.println("Unknown Host exception");
-        }catch(IOException ioe){
-            System.out.println("Some IOException");
+        byte[] buffer=new byte[256];
+        Connection connection=new Connection(5656,buffer);
+        connection.start();
+
+        while(!connection.isNewMessage()){
         }
+        System.out.println(buffer.toString());
     }
     void updateButton(String s){
         button.setText(s);

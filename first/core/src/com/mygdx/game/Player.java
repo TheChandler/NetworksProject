@@ -11,12 +11,12 @@ public class Player {
     public Player(float x,float y){
         this.x=x;
         this.y=y;
-        moveSpeed=10;
+        moveSpeed=100;
     }
     public Player(){
         x=10;
         y=10;
-        moveSpeed=10;
+        moveSpeed=100;
     }
     void setPosition(int x, int y){
         this.x=x;

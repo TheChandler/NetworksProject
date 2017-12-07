@@ -16,8 +16,9 @@ public class Server extends Thread{
     InetAddress[] addresses;
     int nextSpot=0;
     boolean keepServing=true;
-    Server(String name){
-        super(name);
+    byte[] buffer;
+    Server(byte[] buffer){
+        super("server");
         try {
             socket = new DatagramSocket(6565);
         }catch(SocketException e){
